@@ -1,0 +1,334 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "57113184",
+   "metadata": {},
+   "source": [
+    "# 4.1.15 Practical activity: Create line and subplots"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "b79b5413",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Scenario\n",
+    "#Canopy is a new boutique streaming company that is looking to create an app that provides recommendations based on the \n",
+    "#last movie you watched. "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "00427636",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Objective\n",
+    "\n",
+    "#You have access to the data sets movies.csv and ott.xlsx from Canopy. Based on the available information, in this activity, you will:\n",
+    "\n",
+    "#create a line chart to help identify trends in the data and track or spot interesting relationships among the variables\n",
+    "#understand what the data says by visualising it with lineplots."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "8dc36b5b",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Approach\n",
+    "\n",
+    "#Open a new Jupyter Notebook or continue with the same Notebook from the previous activity to reduce the repetition of importing the packages and creating DataFrames.\n",
+    "#    Imported the necessary libraries.\n",
+    "#    Loaded the data sets and create DataFrames using Pandas.\n",
+    "#    Viewed and validated the DataFrames.\n",
+    "#    Merged the two DataFrames into one DataFrame.\n",
+    "\n",
+    "#Plot a lineplot to identify possible trends by comparing the movies' release year and their IMDb ratings. Based on the plot, answer the following questions:\n",
+    "    #What can you infer about the users’ ratings for movies released between 1920 and 1940?\n",
+    "    #What can you infer about the users’ ratings for movies released between 1960 and 1980?\n",
+    "    \n",
+    "#Enhance the lineplot to include a comparison between the age, rating, and year of release of the movies. Based on the plot, answer the following questions:\n",
+    "#    How would you further enhance the lineplot?\n",
+    "#    What can you infer about the movies with a 16+ and 18+ age limit?\n",
+    "#    In which year did the film industry start marking suitable movies for individuals 16+? \n",
+    "\n",
+    "#Save the Notebook to your Github repository by uploading and committing any changes."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "2e688088",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Open a new Jupyter Notebook or continue with the same Notebook from the previous activity to reduce the repetition of importing the packages and creating DataFrames.\n",
+    "#    Imported the necessary libraries.\n",
+    "#    Loaded the data sets and create DataFrames using Pandas.\n",
+    "#    Viewed and validated the DataFrames.\n",
+    "#    Merged the two DataFrames into one DataFrame.\n",
+    "\n",
+    "import pandas as pd\n",
+    "import matplotlib.pyplot as plt\n",
+    "import seaborn as sns\n",
+    "\n",
+    "movies = pd.read_csv(\"movies.csv\")\n",
+    "ott= pd.read_excel(\"ott.xlsx\")\n",
+    "\n",
+    "print(movies.head())\n",
+    "print(movies.shape)\n",
+    "print(movies.dtypes)\n",
+    "\n",
+    "print(ott.head())\n",
+    "print(ott.shape)\n",
+    "print(ott.dtypes)\n",
+    "\n",
+    "mov_ott=pd.merge(movies,ott,how='left',on=\"ID\")\n",
+    "mov_ott"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "28d4d1ae",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Plot a lineplot to identify possible trends by comparing the movies' release year and their IMDb ratings. \n",
+    "#Based on the plot, answer the following questions:\n",
+    "    #What can you infer about the users’ ratings for movies released between 1920 and 1940?\n",
+    "    #What can you infer about the users’ ratings for movies released between 1960 and 1980?\n",
+    "    \n",
+    "sns.lineplot(x=\"Year\",y=\"IMDb\",data=mov_ott)\n",
+    "\n",
+    "#What can you infer about the users’ ratings for movies released between 1920 and 1940?\n",
+    "#Users ratings peaked at 1925 from 1920 but dropped until 1940. This drop has an increasing trend\n",
+    "#However it does not reach its former peaks.\n",
+    "\n",
+    "#What can you infer about the users’ ratings for movies released between 1960 and 1980?\n",
+    "#Movies' ratings for movies released between 1960 and 1980 fluctuate a lot.\n",
+    "#A minimum can be seen at approx.1960 before rising to a peak at approx. 1970, before decreasing again\n",
+    "#as it reaches 1980."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "70b8c26c",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Enhance the lineplot to include a comparison between the age, rating, and year of release of the movies. \n",
+    "#Based on the plot, answer the following questions:\n",
+    "#    How would you further enhance the lineplot?\n",
+    "#I would increase the font size, remove the confidence intervals, change the major tick marks, \n",
+    "#and add age as a seocnd y-axis.\n",
+    "\n",
+    "#sns.lineplot(x=\"Year\",y=\"IMDb\",data=mov_ott,ci=None)\n",
+    "\n",
+    "fig,imdb_ax=plt.subplots()\n",
+    "fig.set_size_inches(14,8)\n",
+    "age_ax =temp_ax.twinx()\n",
+    "\n",
+    "imdb_ax.set_xlabel(\"Year Released\")\n",
+    "age_ax.set_ylabel(\"Age rating\")\n",
+    "imdb_ax.set_ylabel(\"IMDb Rating\")\n",
+    "\n",
+    "#set_major_formatter changes the major ticks on the x axis. dont forget the \"_\"s in the majorformatter\n",
+    "\n",
+    "imdb_line = imdb_ax.plot(mov_ott[\"Year\"],mov_ott[\"IMDb\"],\"r\")\n",
+    "age_line = age_ax.plot(mov_ott[\"Year\"],mov_ott[\"Age\"],\"c\")\n",
+    "\n",
+    "#    What can you infer about the movies with a 16+ and 18+ age limit?\n",
+    "#    In which year did the film industry start marking suitable movies for individuals 16+? \n",
+    "\n",
+    "\n",
+    "#Dr Milena's code\n",
+    "#january = ny_hourly_new[ny_hourly_new[\"date_TimeEST\"] < np.datetime64(\"2016-01-03\")]\n",
+    "#fig, temp_ax =plt.subplots()\n",
+    "#fig.set_size_inches(14,8)\n",
+    "#humid_ax = temp_ax.twinx()\n",
+    "\n",
+    "##temp_ax.set_title(\"Hourly Weather in New York\")\n",
+    "#temp_ax.set_xlabel(\"Date and Time\")\n",
+    "#temp_ax.set_ylabel(\"Temperature (F)\")\n",
+    "#humid_ax.set_ylabel(\"Humidity\")\n",
+    "\n",
+    "#NB set_ylabel NOT set_Ylabel\n",
+    "\n",
+    "# x-axis is quite messed up, shud be hourly data, not days\n",
+    "#major_locator = AutoDateLocator()\n",
+    "#formatter = ConciseDateFormatter(major_locator)\n",
+    "#temp_ax.xaxis.set_major_formatter(formatter)\n",
+    "#humid_ax.xaxis.set_major_formatter(formatter)\n",
+    "\n",
+    "#set_major_formatter changes the major ticks on the x axis. dont forget the \"_\"s in the majorformatter\n",
+    "\n",
+    "#temp_line = temp_ax.plot(january[\"date_TimeEST\"],january[\"TemperatureF\"],\"r\")\n",
+    "#humid_line = humid_ax.plot(january[\"date_TimeEST\"],january[\"Humidity\"],\"c\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "57c49168",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "fig=sns.lineplot(x=\"Year\",y=\"IMDb\",data=mov_ott,ci=None,hue=\"age\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "932e988e",
+   "metadata": {},
+   "source": [
+    "# LSE's SOLN"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "f7f25e1c",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#LSE's solution - 4.1.15\n",
+    "\n",
+    "# Import necessary libraries.\n",
+    "import pandas as pd\n",
+    "import seaborn as sns\n",
+    "import matplotlib.pyplot as plt\n",
+    "\n",
+    "# Load the Excel data using pd.read_excel.\n",
+    "ott = pd.read_excel('ott.xlsx')\n",
+    "\n",
+    "# View the columns.\n",
+    "print(ott.columns)\n",
+    "\n",
+    "# Load the CSV data using pd.read_csv.\n",
+    "movies = pd.read_csv('movies.csv')\n",
+    "\n",
+    "print(movies.columns)\n",
+    "\n",
+    "# Data imported correctly?\n",
+    "print(movies.head())\n",
+    "print(movies.shape)\n",
+    "print(movies.dtypes)\n",
+    "\n",
+    "# Data imported correctly.\n",
+    "print(ott.head())\n",
+    "print(ott.dtypes)\n",
+    "print(ott.shape)\n",
+    "\n",
+    "# Merge the two DataFrames.\n",
+    "mov_ott = pd.merge(movies, ott, how='left', on = 'ID')\n",
+    "\n",
+    "# View the DataFrame.\n",
+    "print(mov_ott.shape)\n",
+    "mov_ott.head()\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "f3c4d3c3",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Create a simple lineplot.\n",
+    "sns.lineplot(x='Year', y='IMDb', data=mov_ott, ci=None)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "26636c73",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Create lineplots with specification.\n",
+    "sns.lineplot(x = 'Year', y = 'IMDb',\n",
+    "             data=mov_ott[mov_ott['Age'].isin(['16+', '18+'])],\n",
+    "             hue ='Age', ci=None)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "6b392891",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Redo Q2\n",
+    "\n",
+    "#Enhance the lineplot to include a comparison between the age, rating, and year of release of the movies. \n",
+    "#Based on the plot, answer the following questions:\n",
+    "#    How would you further enhance the lineplot?\n",
+    "\n",
+    "#I would increase the font size, remove the confidence intervals, change the major tick marks, \n",
+    "#and add age as a seocnd y-axis, or as a hue. I would also filter the ages as it would make the graph too noisy.\n",
+    "\n",
+    "sns.lineplot(x=\"Year\",y=\"IMDb\",\n",
+    "            data=mov_ott[mov_ott[\"Age\"].isin([\"16+\",\"18+\"])],\n",
+    "            hue=\"Age\", ci=None)\n",
+    "\n",
+    "#    What can you infer about the movies with a 16+ and 18+ age limit?\n",
+    "# Movies with a 16+ age limit only started in the 1970s/\n",
+    "# Movies with a 16+age limit had a massive dip in the 2000s.\n",
+    "#Before increasing again the 2010s\n",
+    "\n",
+    "#Movies with a 18+ rating peaked at the 1950s (maye beuase it was more freer then)\n",
+    "# but the ratings started to decline and remain stagant up till the 2020s.\n",
+    "\n",
+    "#    In which year did the film industry start marking suitable movies for individuals 16+?\n",
+    "#approx 1970"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "5b007d83",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "8a65052b",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.8.8"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
